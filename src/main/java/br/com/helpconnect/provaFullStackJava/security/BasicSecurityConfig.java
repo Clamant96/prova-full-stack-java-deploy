@@ -64,8 +64,8 @@ public class BasicSecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/usuario", "/endereco").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
-            .authenticationProvider(authenticationProvider())
-            .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+            .authenticationProvider(authenticationProvider());
+            // .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -11,7 +11,7 @@
 	<groupId>br.com.helpconnect</groupId>
 	<artifactId>provaFullStackJava</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>provaFullStackJava</name>
 	<description>PROVA FULLSTACK JAVA</description>
 	<url/>

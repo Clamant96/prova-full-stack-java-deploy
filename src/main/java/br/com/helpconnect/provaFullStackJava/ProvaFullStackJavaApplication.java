@@ -8,6 +8,7 @@ public class ProvaFullStackJavaApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProvaFullStackJavaApplication.class, args);
+		System.out.println("======== APLICAÇÃO INICIADA COM SUCESSO ========");
 		logMemoryStats();
 	}
 

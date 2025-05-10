@@ -65,6 +65,7 @@ public class BasicSecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/usuario/login").permitAll()
                 .requestMatchers("/usuario/cadastrar").permitAll()
+                .requestMatchers("/actuator/health").permitAll()
                 .requestMatchers(HttpMethod.GET, "/usuario").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/endereco").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.OPTIONS).permitAll()

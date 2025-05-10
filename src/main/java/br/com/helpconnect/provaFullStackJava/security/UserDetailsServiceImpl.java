@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.helpconnect.provaFullStackJava.model.Usuario;
 import br.com.helpconnect.provaFullStackJava.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 
 
 @Service
@@ -21,14 +22,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private UsuarioRepository usuarioRepository;
 
 	@Override
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    @Transactional
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(username);
 
-		Optional<Usuario> usuario = usuarioRepository.findByEmail(userName);
+        if (usuario.isEmpty()) {
+            throw new UsernameNotFoundException("Usuário não encontrado com o email: " + username);
+        }
 
-		if (usuario.isPresent())
-			return new UserDetailsImpl(usuario.get());
-		else
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-			
-	}
+        return new UserDetailsImpl(usuario.get());
+    }
 }

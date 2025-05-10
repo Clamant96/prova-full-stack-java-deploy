@@ -2,6 +2,7 @@ package br.com.helpconnect.provaFullStackJava.security;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,10 +22,12 @@ public class UserDetailsImpl implements UserDetails {
 	
 
 	public UserDetailsImpl(Usuario user) {
-		this.userName = user.getEmail();
-		this.password = user.getSenha();
-		this.authorities = user.getAuthorities();
-	}
+        this.userName = user.getEmail();
+        this.password = user.getSenha();
+        this.authorities = user.getAuthorities().stream()
+                .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
+                .collect(Collectors.toList());
+    }
 	
 	public UserDetailsImpl() {}
 

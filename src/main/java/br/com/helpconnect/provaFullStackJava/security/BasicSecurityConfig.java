@@ -19,6 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.MethodArgumentBuilder;
+
+import aj.org.objectweb.asm.commons.Method;
 
 @Configuration
 @EnableWebSecurity
@@ -29,6 +32,7 @@ public class BasicSecurityConfig {
 
     @Bean
     UserDetailsService userDetailsService() {
+
         return new UserDetailsServiceImpl();
     }
 
@@ -39,34 +43,36 @@ public class BasicSecurityConfig {
 
     @Bean
     AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService());
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        return authenticationProvider;
     }
 
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
-
+    
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
+            .sessionManagement(management -> management
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .csrf(csrf -> csrf.disable())
             .cors(withDefaults())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/usuario/login", "/usuario/cadastrar", "/actuator/health").permitAll()
+                .requestMatchers("/usuario/login").permitAll()
+                .requestMatchers("/usuario/cadastrar").permitAll()
+                .requestMatchers(HttpMethod.GET, "/usuario").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/endereco").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                .requestMatchers(HttpMethod.GET, "/usuario", "/endereco").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
-            .authenticationProvider(authenticationProvider());
-            // .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
-
+                .anyRequest().authenticated())
+            .authenticationProvider(authenticationProvider())
+            .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+        
         return http.build();
     }
+
 }

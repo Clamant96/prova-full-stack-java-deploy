@@ -99,7 +99,7 @@ public class BasicSecurityConfig {
         return http.build();
     }
 
-    @Bean
+    /* @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
@@ -110,7 +110,7 @@ public class BasicSecurityConfig {
         em.setJpaVendorAdapter(vendorAdapter);
         
         return em;
-    }
+    } */
 
     @Bean
     public DataSource dataSource() {

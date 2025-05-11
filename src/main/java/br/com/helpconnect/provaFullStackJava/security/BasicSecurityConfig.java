@@ -63,8 +63,26 @@ public class BasicSecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(withDefaults())
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/**").permitAll()
+        		.requestMatchers(
+                        "/",
+                        "/index.html",
+                        "/*.js",
+                        "/*.css",
+                        "/*.ico",
+                        "/assets/**",
+                        "/img/**"
+                    ).permitAll()
+        		.requestMatchers(
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/swagger-resources/**",
+                        "/swagger-ui.html",
+                        "/webjars/**"
+                    ).permitAll()
                 .requestMatchers("/usuario/login").permitAll()
                 .requestMatchers("/usuario/cadastrar").permitAll()
+                .requestMatchers("/actuator/health").permitAll()
                 .requestMatchers(HttpMethod.GET, "/usuario").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/endereco").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.OPTIONS).permitAll()

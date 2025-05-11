@@ -20,7 +20,7 @@ import jakarta.transaction.Transactional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	@Autowired
-    @Lazy
+    // @Lazy
 	private UsuarioRepository usuarioRepository;
 
 	@Override

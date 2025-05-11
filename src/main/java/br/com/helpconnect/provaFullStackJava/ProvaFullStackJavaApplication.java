@@ -7,7 +7,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EntityScan("br.com.helpconnect.provaFullStackJava.model")
-@EnableJpaRepositories("br.com.helpconnect.provaFullStackJava.repository")
+@EnableJpaRepositories(
+    basePackages = "br.com.helpconnect.provaFullStackJava.repository",
+    entityManagerFactoryRef = "entityManagerFactory"
+)
 public class ProvaFullStackJavaApplication {
 
 	public static void main(String[] args) {

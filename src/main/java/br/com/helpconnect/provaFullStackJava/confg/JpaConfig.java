@@ -11,11 +11,8 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableJpaRepositories(
-    basePackages = "br.com.helpconnect.provaFullStackJava.repository",
-    entityManagerFactoryRef = "entityManagerFactory"
-)
 @EnableTransactionManagement
+@EnableJpaRepositories(basePackages = "br.com.helpconnect.provaFullStackJava.repository")
 public class JpaConfig {
 
     @Bean

@@ -2,11 +2,17 @@ package br.com.helpconnect.provaFullStackJava.security;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.Database;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -91,6 +97,29 @@ public class BasicSecurityConfig {
             .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
         
         return http.build();
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource());
+        em.setPackagesToScan("br.com.helpconnect.provaFullStackJava.model");
+        
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setDatabase(Database.POSTGRESQL);
+        em.setJpaVendorAdapter(vendorAdapter);
+        
+        return em;
+    }
+
+    @Bean
+    public DataSource dataSource() {
+        return DataSourceBuilder.create()
+            .driverClassName("org.postgresql.Driver")
+            .url(System.getenv("DB_URL"))
+            .username(System.getenv("DB_USER"))
+            .password(System.getenv("DB_PASSWORD"))
+            .build();
     }
 
 }

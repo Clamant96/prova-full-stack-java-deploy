@@ -21,11 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.helpconnect.provaFullStackJava.model.UserLogin;
 import br.com.helpconnect.provaFullStackJava.model.Usuario;
 import br.com.helpconnect.provaFullStackJava.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuario")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@Tag(name = "Endpoint de Teste", description = "Verificação básica da API")
 public class UsuarioController {
 
 	@Autowired
@@ -33,6 +36,7 @@ public class UsuarioController {
 	
 	@GetMapping
 	@PreAuthorize("hasRole('ADMIN')")
+	@Operation(summary = "Endpoint de teste", description = "Retorna uma mensagem simples")
 	public ResponseEntity<Page<Usuario>> getAll(
 			@RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,

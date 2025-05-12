@@ -2,17 +2,10 @@ package br.com.helpconnect.provaFullStackJava.security;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.Database;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -25,9 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.MethodArgumentBuilder;
-
-import aj.org.objectweb.asm.commons.Method;
 
 @Configuration
 @EnableWebSecurity
@@ -69,23 +59,25 @@ public class BasicSecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(withDefaults())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/**").permitAll()
         		.requestMatchers(
-                        "/",
-                        "/index.html",
-                        "/*.js",
-                        "/*.css",
-                        "/*.ico",
-                        "/assets/**",
-                        "/img/**"
-                    ).permitAll()
+                    "/",
+                    "/index.html",
+                    "/*.js",
+                    "/*.css",
+                    "/*.ico",
+                    "/assets/**",
+                    "/img/**"
+                ).permitAll()
         		.requestMatchers(
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/swagger-resources/**",
-                        "/swagger-ui.html",
-                        "/webjars/**"
-                    ).permitAll()
+    			    "/v3/api-docs/**",
+    			    "/swagger-ui/**",
+    			    "/swagger-ui.html"
+    			).permitAll()
+        		.requestMatchers(
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html"
+                ).permitAll()
                 .requestMatchers("/usuario/login").permitAll()
                 .requestMatchers("/usuario/cadastrar").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
@@ -97,29 +89,6 @@ public class BasicSecurityConfig {
             .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
         
         return http.build();
-    }
-
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(dataSource());
-        em.setPackagesToScan("br.com.helpconnect.provaFullStackJava.model");
-        
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setDatabase(Database.POSTGRESQL);
-        em.setJpaVendorAdapter(vendorAdapter);
-        
-        return em;
-    }
-
-    @Bean
-    public DataSource dataSource() {
-        return DataSourceBuilder.create()
-            .driverClassName("org.postgresql.Driver")
-            .url(System.getenv("DB_URL"))
-            .username(System.getenv("DB_USER"))
-            .password(System.getenv("DB_PASSWORD"))
-            .build();
     }
 
 }

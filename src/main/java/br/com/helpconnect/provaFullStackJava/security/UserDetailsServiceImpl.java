@@ -3,7 +3,6 @@ package br.com.helpconnect.provaFullStackJava.security;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,7 +19,6 @@ import jakarta.transaction.Transactional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	@Autowired
-    // @Lazy
 	private UsuarioRepository usuarioRepository;
 
 	@Override

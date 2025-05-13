@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
@@ -24,5 +25,13 @@ public class ProvaFullStackJavaWebMvcConfigurer implements WebMvcConfigurer {
                 	return requestedResource.exists() && requestedResource.isReadable() ? requestedResource : new ClassPathResource("/public/index.html");
             		}
         		});
-		}
+	}
+
+	@Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*") // Ou especifique o domínio do frontend (ex: "https://meu-frontend.com")
+                .allowedMethods("GET", "POST", "PUT", "DELETE");
+    }
+	
 }

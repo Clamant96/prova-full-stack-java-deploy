@@ -27,11 +27,11 @@ public class ProvaFullStackJavaWebMvcConfigurer implements WebMvcConfigurer {
         		});
 	}
 
-	@Override
+	/* @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*") // Ou especifique o domínio do frontend (ex: "https://meu-frontend.com")
                 .allowedMethods("GET", "POST", "PUT", "DELETE");
-    }
-	
+    } */
+
 }
